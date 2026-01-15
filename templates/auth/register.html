@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block pagetitle %} Register Page {% endblock %}
+
+{% block content %}
+
+<h1>register page</h1>
+
+{% if messages %}
+    {% for message in messages%}
+        <p>{{message}}</p>
+    {% endfor %}
+{% endif %}
+
+
+<form method="POST">
+    {% csrf_token %}
+    <label>
+        Enter first name
+        <input type="text" id="first-name" name="first-name" placeholder="John">
+    </label>
+    <label>
+        Enter last name
+        <input type="text" id="last-name" name="last-name" placeholder="Doe">
+    </label>
+    <label>
+        Enter e-mail
+        <input type="email" id="email" name="email" placeholder="exmaple@gmail.com">
+    </label>
+
+    <label>
+        Enter password
+        <input type="password" id="password" name="password" placeholder="********">
+    </label>
+
+    <label>
+        Re-enter password
+        <input type="password" id="re-password" name="re-password" placeholder="********">
+    </label>
+    <button type="submit">Verify Email</button>
+</form>
+
+{% endblock %}
