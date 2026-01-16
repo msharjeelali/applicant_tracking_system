@@ -1,0 +1,23 @@
+{% extends 'basetwo.html' %}
+
+{% block pagetitle %}
+
+Email Verification Page
+
+{% endblock %}
+
+{% block content %}
+
+<form method="POST" action="/user/verify/">
+    {% csrf_token %}
+    
+    <label>
+        Enter OTP sent on your email
+        <input type="text" name="otp" id="otp" required>
+    </label>
+
+    <button type="submit">Verify</button>
+</form>
+
+
+{% endblock %}
