@@ -1,22 +1,17 @@
-{% extends 'basetwo.html' %}
-
-{% block pagetitle %} Register Page {% endblock %}
-
 {% block content %}
 
-<h1>register page</h1>
+<h1>Register Page</h1>
 
 {% if messages %}
-    {% for message in messages%}
-        <p>{{message}}</p>
+    {% for message in messages %}
+        <p>{{ message }}</p>
     {% endfor %}
 {% endif %}
 
-
 <form method="POST">
     {% csrf_token %}
-    {{form.as_p}}
-    <button type="submit">Complete Registration</button>
+    {{ form }}
+    <button type="submit">Get Started</button>
 </form>
 
 {% endblock %}

@@ -1,0 +1,19 @@
+{% extends "base.html"%}
+
+{% block pagetitle %}Login Page{% endblock %}
+
+{% block content %}
+
+{% if messages %}
+    {% for message in messages%}
+        <p>{{message}}</p>
+    {% endfor %}
+{% endif %}
+
+<form method="POST">
+    {% csrf_token %}
+    {{form}}
+    <button type="submit">Login</button>
+</form>
+
+{% endblock %}

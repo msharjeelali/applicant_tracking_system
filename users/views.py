@@ -1,14 +1,18 @@
-from .models import CustomUser
-from .forms import RegisterForm
 from django.conf import settings
 from django.utils import timezone
 from django.contrib import messages
 from django.http import HttpResponse
+from .forms import RegisterForm, LoginForm
 from django.shortcuts import render, redirect
+from .models import CustomUser, Applicant, Recruiter
 from .utils import send_otp, generate_otp, verify_otp
+from django.contrib.auth import authenticate, login, logout
 
 # Create your views here.
 def register_page(request):
+
+    if request.user.is_authenticated:
+        return redirect("/dashboard/")
 
     if request.method == "POST":
         form = RegisterForm(request.POST)
@@ -20,25 +24,33 @@ def register_page(request):
                 messages.error(request, message="Email already registered!")
         
             else:
-                otp = generate_otp()
-                status = send_otp(form.cleaned_data['email'], otp)            
+                #otp = generate_otp()
+                #status = send_otp(form.cleaned_data['email'], otp)            
                 
-                if status == 1:
-                    user = CustomUser.objects.create_user(otp = otp,
-                                                          username=form.cleaned_data['email'],
-                                                          role = "applicant",
-                                                          email = form.cleaned_data['email'],
-                                                          password = form.cleaned_data['password'],
-                                                          last_name = form.cleaned_data['last_name'],
-                                                          first_name = form.cleaned_data['first_name'],
-                                                          otp_time_stamp = timezone.now())
-                    user.save()
-                    messages.success(request, message="Verfication OTP sent to your email!")
-                    request.session['otp_email'] = form.cleaned_data['email']
-                    return render(request, 'auth/verify.html')
-                
+                #if status == 1:
+                user = CustomUser.objects.create_user(role = form.cleaned_data['role'],
+                                                      email = form.cleaned_data['email'],
+                                                      username=form.cleaned_data['email'],
+                                                      password = form.cleaned_data['password'],
+                                                      last_name = form.cleaned_data['last_name'],
+                                                      first_name = form.cleaned_data['first_name'])
+                user.save()
+
+                if form.cleaned_data['role'] == "applicant":
+                    Applicant.objects.create(
+                        user = user
+                    )
                 else:
-                    messages.error(request, message="Failed to sent verification OTP!")
+                    Recruiter.objects.create(
+                        user = user
+                    )
+                    
+                messages.success(request, message="User registered successfully!")
+                #request.session['otp_email'] = form.cleaned_data['email']
+                return redirect('/user/login')
+                
+                #else:
+                #    messages.error(request, message="Failed to sent verification OTP!")
     else:
         form = RegisterForm() 
 
@@ -88,6 +100,39 @@ def verify_page(request):
     return render(request, 'auth/verify.html')
 
 
-
 def login_page(request):
-    return HttpResponse("Login Page")
+
+    if request.user.is_authenticated:
+        return redirect("/dashboard/")
+
+    if request.method == "POST":
+        form = LoginForm(request.POST)
+
+        if form.is_valid():
+            query = CustomUser.objects.filter(email = form.cleaned_data['email'])
+
+            if query.exists():
+                user = authenticate(request, username = form.cleaned_data['email'], password = form.cleaned_data['password'])
+
+                if user is not None:
+                    messages.success(request, "User logged in successfully!")
+                    login(request, user)
+                    return redirect("/")
+                
+                else:
+                    messages.error(request, "Incorrect pssword!")
+            
+            else:
+                messages.error(request, "Email doesnot exists!")
+    else:
+        form = LoginForm()
+
+    return render(request, "auth/login.html", { "form": form})
+
+
+def logout_page(request):
+    
+    if request.user.is_authenticated:
+        logout(request)
+    
+    return redirect('/')
