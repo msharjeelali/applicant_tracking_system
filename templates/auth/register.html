@@ -1,17 +1,33 @@
-{% block content %}
+{% extends "base.html" %} 
 
-<h1>Register Page</h1>
+{% block pagetitle %}Register Page{% endblock %}
 
-{% if messages %}
-    {% for message in messages %}
-        <p>{{ message }}</p>
-    {% endfor %}
-{% endif %}
+{% block content %} 
 
-<form method="POST">
-    {% csrf_token %}
-    {{ form }}
-    <button type="submit">Get Started</button>
-</form>
+<div class="page-wrapper">
+  <h2>Create your Account</h2>
+  <p>Join the Applicant Tracking System today.</p>
+
+  <div class="auth-card">
+
+    {% if messages %}
+      {% for message in messages %}
+        <p class="message {{ message.tags }}">{{ message }}</p>
+      {% endfor %}
+    {% endif %}
+
+    <h2>Register</h2>
+    <form method="POST">
+      {% csrf_token %} 
+      {{ form }}
+      <button type="submit" class="btn-block">Get Started</button>
+    </form>
+  </div>
+
+  <div class="login-footer">
+    <span>Already have an account?</span>
+    <a href="{% url 'login_page' %}">Login Page</a>
+  </div>
+</div>
 
 {% endblock %}

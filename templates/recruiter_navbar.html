@@ -1,3 +1,27 @@
-<nav>
-    
+<nav class="navbar">
+    <a href="{% url 'home_page' %}">
+        <h1>Applicant Tracking System</h1>
+    </a>
+
+    <div>
+        <a href="{% url 'home_page' %}" class="nav-links {% if request.path == '/' %} active {% endif %}">Dashboard</a>
+        <a href="{% url 'jobs_page' %}" class="nav-links {% if request.path == '/jobs/' %} active {% endif %}">Job</a>
+        <a class="nav-links">Application</a>
+    </div>
+
+    <div class="navbar-right">
+        <!-- User profile dropdown -->
+        <div class="user-dropdown">
+            <!-- Profile icon -->
+             {% load static%}
+            <img src="{% static 'images/user-icon.png' %}" alt="User" class="user-icon">
+
+            <!-- Dropdown menu -->
+            <div class="dropdown-menu">
+                <a href="{% url 'profile_page' %}">Profile</a>
+                <a href="">Notifications</a>
+                <a href="{% url 'logout_page' %}">Logout</a>
+            </div>
+        </div>
+    </div>
 </nav>

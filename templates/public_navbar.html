@@ -1,8 +1,16 @@
-<nav>
-    <a href="{% url 'register_page' %}">
-        <button>Register</button>
+<nav class="navbar">
+    <a href="{% url 'home_page' %}">
+        <h1>
+            Applicant Tracking System
+        </h1>
     </a>
-    <a href="{% url 'login_page' %}">
-        <button>Login</button>
-    </a>
+
+    <div>
+        <a href="{% url 'register_page' %}">
+            <button class="btn-primary">Register</button>
+        </a>
+        <a href="{% url 'login_page' %}">
+            <button class="btn-secondary">Login</button>
+        </a>
+    </div>
 </nav>

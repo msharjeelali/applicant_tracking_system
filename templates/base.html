@@ -1,19 +1,54 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block pagetitle %} {% endblock %}</title>
-</head>
-<body>
-    {% if not request.user.is_authenticated %}
-        {% include "public_navbar.html" %}
-    {% else %}
-        {% include "applicant_navbar.html" %}
-    {% endif %}
-    
-    {% block content %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
 
-    {% endblock %}
-</body>
+    <style>
+      body {
+        font-family:
+          "Segoe UI",
+          system-ui,
+          -apple-system,
+          sans-serif;
+        font-size: 16px;
+        color: #1f2937;
+        margin: 0;
+        padding: 0;
+        background-color: #f9fafb;
+      }
+
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        font-family: inherit;
+        color: #1f2937;
+        margin: 0;
+      }
+
+      p {
+        font-family: inherit;
+        margin: 0;
+        color: #6b7280;
+      }
+    </style>
+  </head>
+  <body>
+
+    {% if not request.user.is_authenticated %} 
+      {% include "public_navbar.html"%} 
+    {% elif request.user.role == "applicant" %} 
+      {% include "applicant_navbar.html" %} 
+    {% elif request.user.role == "recruiter" %}
+      {% include "recruiter_navbar.html" %}
+    {% endif %} 
+    
+    {% block content %} {% endblock %}
+  </body>
 </html>

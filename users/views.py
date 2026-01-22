@@ -136,3 +136,11 @@ def logout_page(request):
         logout(request)
     
     return redirect('/')
+
+
+def profile_page(request):
+
+    
+
+
+    return render(request, 'auth/profile.html')
